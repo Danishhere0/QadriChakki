@@ -20,6 +20,7 @@ export const selectCreatedItem = createSelector(
 );
 
 export const selectUpdatedItem = createSelector(
+
   [selectAdavancedCrud],
   (adavancedCrud) => adavancedCrud.update
 );

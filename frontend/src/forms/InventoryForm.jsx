@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, InputNumber } from 'antd';
+import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
 export default function InventoryForm() {
   // Renamed to InventoryForm for clarity
@@ -15,7 +16,7 @@ export default function InventoryForm() {
           },
         ]}
       >
-        <Input />
+        <AutoCompleteAsync entity={'client'} displayLabels={['name']} searchFields={'name'} />
       </Form.Item>
 
       <Form.Item

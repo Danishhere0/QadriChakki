@@ -18,14 +18,14 @@ const Notifications = () => {
   };
 
   return (
-    <div className="notifications whiteBox shadow">
-      <div className="pad20">
+    <div className="notifications whiteBox shadow w-[300px]">
+      {/* <div className="pad20">
         <p className="strong">Notifications</p>
         <Button type="text" shape="circle" className="del-notif">
           <DeleteOutlined />
         </Button>
-      </div>
-      <div className="line"></div>
+      </div> */}
+      {/* <div className="line"></div> */}
       <div className="notif-list">
         {notifications.map((notification) => (
           <div href="/" key={notification.id} className="notification">

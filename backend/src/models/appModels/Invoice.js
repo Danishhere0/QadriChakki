@@ -36,7 +36,13 @@ const invoiceSchema = new mongoose.Schema({
   client: {
     type: mongoose.Schema.ObjectId,
     ref: 'Client',
-    required: true,
+    // required: true,
+    autopopulate: true,
+  },
+  supplier: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Supplier',
+    // required: true,
     autopopulate: true,
   },
   converted: {

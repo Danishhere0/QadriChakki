@@ -41,6 +41,7 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
+    
   };
 
   useEffect(() => {

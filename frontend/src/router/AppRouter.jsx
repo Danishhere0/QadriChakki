@@ -24,6 +24,8 @@ const Payment = lazy(() => import('@/pages/Payment/index'));
 const PaymentRead = lazy(() => import('@/pages/Payment/PaymentRead'));
 const PaymentUpdate = lazy(() => import('@/pages/Payment/PaymentUpdate'));
 const Employee = lazy(() => import('@/pages/Employee'));
+const Supplier = lazy(() => import('@/pages/Supplier'));
+
 const Admin = lazy(() => import('@/pages/Admin'));
 const Settings = lazy(() => import('@/pages/Settings/Settings'));
 const PaymentMode = lazy(() => import('@/pages/PaymentMode'));
@@ -74,6 +76,10 @@ export default function AppRouter() {
     {
       path: '/',
       element: <Dashboard />,
+    },
+    {
+      path: '/supplier',
+      element: <Supplier />,
     },
     {
       path: '/customer',

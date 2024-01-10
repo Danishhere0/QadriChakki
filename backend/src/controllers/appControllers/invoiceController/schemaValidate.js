@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const schema = Joi.object({
   client: Joi.alternatives().try(Joi.string(), Joi.object()).required(),
+  
   number: Joi.number().required(),
   year: Joi.number().required(),
   status: Joi.string().required(),

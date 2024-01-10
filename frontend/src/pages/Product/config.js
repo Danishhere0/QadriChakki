@@ -21,4 +21,7 @@ export const fields = {
   ref: {
     type: 'string',
   },
+  number: {
+    type: 'number',
+  },
 };

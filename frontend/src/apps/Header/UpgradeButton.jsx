@@ -5,13 +5,14 @@ import { Avatar, Popover, Button, Badge } from 'antd';
 import { RocketOutlined } from '@ant-design/icons';
 
 import useLanguage from '@/locale/useLanguage';
+import Notifications from '@/components/Notification';
 
 export default function UpgradeButton() {
   const translate = useLanguage();
   const Content = () => {
     return (
       <>
-        <p>{translate('Do you need help on customize of this app')}</p>
+        {/* <p>{translate('Do you need help on customize of this app')}</p>
         <Button
           type="primary"
           onClick={() => {
@@ -19,13 +20,18 @@ export default function UpgradeButton() {
           }}
         >
           {translate('Contact us')}
-        </Button>
+        </Button> */}
+        {/* <Notifications /> */}
       </>
     );
   };
 
   return (
-    <Popover content={<Content />} title={translate('Customize this application')} trigger="click">
+    <Popover
+      content={<Notifications />}
+      title={translate('Notifications')}
+      trigger="click"
+    >
       <Badge count={1} size="small">
         <Avatar
           icon={<RocketOutlined />}

@@ -60,6 +60,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/customer'}>{translate('customer')}</Link>,
     },
     {
+      key: 'supplier',
+      icon: <CustomerServiceOutlined />,
+      label: <Link to={'/supplier'}>{translate('supplier')}</Link>,
+    },
+    {
       key: 'people',
       icon: <UserOutlined />,
       label: <Link to={'/people'}>{translate('people')}</Link>,
@@ -88,9 +93,8 @@ function Sidebar({ collapsible, isMobile = false }) {
     {
       key: 'inventory',
       icon: <InboxOutlined />,
-      label: <Link to={'/Inventory'}>{translate('inventory')}</Link>,
+      label: <Link to={'/inventory'}>{translate('inventory')}</Link>,
     },
-
     {
       key: 'invoice',
       icon: <ContainerOutlined />,

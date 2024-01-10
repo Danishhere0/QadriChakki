@@ -28,9 +28,10 @@ const SupplierSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Supplier',
   },
-  peoples: [{ type: mongoose.Schema.ObjectId, ref: 'People' }],
-  mainContact: { type: mongoose.Schema.ObjectId, ref: 'People' },
-  products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
+
+  peoples: [{ type: mongoose.Schema.ObjectId, ref: 'People', autopopulate: true }],
+  mainContact: { type: mongoose.Schema.ObjectId, ref: 'People', autopopulate: true },
+  products: [{ type: mongoose.Schema.ObjectId, ref: 'Product', autopopulate: true }],
   icon: {
     type: String,
     trim: true,

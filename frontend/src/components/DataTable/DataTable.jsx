@@ -141,7 +141,6 @@ export default function DataTable({ config, extra = [] }) {
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
 
   const { pagination, items: dataSource } = listResult;
-
   const dispatch = useDispatch();
 
   const handelDataTableLoad = useCallback((pagination) => {

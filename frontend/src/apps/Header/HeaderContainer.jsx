@@ -19,6 +19,7 @@ import useLanguage from '@/locale/useLanguage';
 import SelectLanguage from '@/components/SelectLanguage';
 
 import UpgradeButton from './UpgradeButton';
+import Notifications from '@/components/Notification';
 
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
@@ -137,7 +138,7 @@ export default function HeaderContent() {
       </Dropdown>
 
       <UpgradeButton />
-
+      {/* <Notifications/> */}
       <SelectLanguage />
     </Header>
   );
