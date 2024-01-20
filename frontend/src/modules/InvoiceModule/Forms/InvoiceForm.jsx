@@ -19,17 +19,18 @@ import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
 
-export default function InvoiceForm({ subTotal = 0, current = null }) {
+export default function InvoiceForm({ type, subTotal = 0, current = null }) {
   const { last_invoice_number } = useSelector(selectFinanceSettings);
 
   // if (!last_invoice_number) {
   //   return <></>;
   // }
+  console.log('type', type);
 
-  return <LoadInvoiceForm subTotal={subTotal} current={current} />;
+  return <LoadInvoiceForm type={type} subTotal={subTotal} current={current} />;
 }
 
-function LoadInvoiceForm({ subTotal = 0, current = null }) {
+function LoadInvoiceForm({ type, subTotal = 0, current = null }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const { last_invoice_number } = useSelector(selectFinanceSettings);
@@ -41,9 +42,8 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
-    
   };
-
+  console.log('type2', type);
   useEffect(() => {
     if (current) {
       const { taxRate = 0, year, number } = current;
@@ -64,20 +64,27 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
     addField.current.click();
   }, []);
 
+  var user = '';
+  if (type == 'sale') {
+    user = 'client';
+  } else {
+    user = 'supplier';
+  }
+
   return (
     <>
       <Row gutter={[12, 0]}>
         <Col className="gutter-row" span={9}>
           <Form.Item
-            name="client"
-            label={translate('Client')}
+            name={user}
+            label={translate(user)}
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <AutoCompleteAsync entity={'client'} displayLabels={['name']} searchFields={'name'} />
+            <AutoCompleteAsync entity={user} displayLabels={['name']} searchFields={'name'} />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={5}>
@@ -142,7 +149,7 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
                 required: true,
               },
             ]}
-            initialValue={'purchase'}
+            initialValue={type}
           >
             <Select
               options={[

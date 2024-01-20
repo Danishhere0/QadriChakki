@@ -5,17 +5,19 @@ const Model = mongoose.model('Invoice');
 const paginatedList = async (req, res) => {
   const page = req.query.page || 1;
   const limit = parseInt(req.query.items) || 10;
+  const type = req.query.type;
+
   const skip = page * limit - limit;
 
   //  Query the database for a list of all results
-  const resultsPromise = Model.find({ removed: false })
+  const resultsPromise = Model.find({ removed: false, type:type })
     .skip(skip)
     .limit(limit)
     .sort({ created: 'desc' })
     .populate('createdBy', 'name')
     .exec();
   // Counting the total documents
-  const countPromise = Model.countDocuments({ removed: false });
+  const countPromise = Model.countDocuments({ removed: false, type: type });
   // Resolving both promises
   const [result, count] = await Promise.all([resultsPromise, countPromise]);
   // Calculating total pages

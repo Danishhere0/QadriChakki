@@ -23,10 +23,17 @@ import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
 function AddNewItem({ config }) {
   const navigate = useNavigate();
-  const { ADD_NEW_ENTITY, entity } = config;
+  const { ADD_NEW_ENTITY, entity, type } = config;
 
+  console.log('type', type);
   const handleClick = () => {
-    navigate(`/${entity.toLowerCase()}/create`);
+    if (type) {
+      if (type == 'sale') {
+        navigate(`/${type}Invoice/create`);
+      } else navigate(`/${type}Invoice/create`);
+    } else {
+      navigate(`/${entity.toLowerCase()}/create`);
+    }
   };
 
   return (
@@ -40,7 +47,7 @@ export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
 
-  const { DATATABLE_TITLE } = config;
+  const { DATATABLE_TITLE, type } = config;
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
 
@@ -149,9 +156,18 @@ export default function DataTable({ config, extra = [] }) {
   const dispatch = useDispatch();
 
   const handelDataTableLoad = (pagination) => {
-    const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
+    const options = {
+      page: pagination?.current || 1,
+      items: pagination?.pageSize || 10,
+      type: type,
+    };
     dispatch(erp.list({ entity, options }));
   };
+
+  useEffect(() => {
+    handelDataTableLoad();
+    console.log('load');
+  }, [type]);
 
   const dispatcher = () => {
     dispatch(erp.list({ entity }));

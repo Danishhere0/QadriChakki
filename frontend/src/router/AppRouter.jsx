@@ -118,12 +118,20 @@ export default function AppRouter() {
       element: <Order />,
     },
     {
-      path: '/invoice',
-      element: <Invoice />,
+      path: '/saleInvoice',
+      element: <Invoice type="sale" />,
     },
     {
-      path: '/invoice/create',
-      element: <InvoiceCreate />,
+      path: '/purchaseInvoice',
+      element: <Invoice type="purchase" />,
+    },
+    {
+      path: '/saleInvoice/create',
+      element: <InvoiceCreate type="sale" />,
+    },
+    {
+      path: '/purchaseInvoice/create',
+      element: <InvoiceCreate type="purchase" />,
     },
     {
       path: '/invoice/read/:id',

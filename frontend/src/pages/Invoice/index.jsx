@@ -6,7 +6,7 @@ import { tagColor } from '@/utils/statusTagColor';
 import { useMoney, useDate } from '@/settings';
 import InvoiceDataTableModule from '@/modules/InvoiceModule/InvoiceDataTableModule';
 
-export default function Invoice() {
+export default function Invoice({ type }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const entity = 'invoice';
@@ -26,6 +26,11 @@ export default function Invoice() {
       title: translate('Client'),
       dataIndex: ['client', 'name'],
     },
+    {
+      title: translate('Type'),
+      dataIndex: 'type',
+    },
+
     {
       title: translate('Date'),
       dataIndex: 'date',
@@ -116,6 +121,7 @@ export default function Invoice() {
     dataTableColumns,
     searchConfig,
     deleteModalLabels,
+    type: type,
   };
 
   return <InvoiceDataTableModule config={config} />;

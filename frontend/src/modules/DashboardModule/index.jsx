@@ -70,17 +70,23 @@ export default function DashboardModule() {
 
   const entityData = [
     {
-      result: invoiceResult,
+      result: invoiceResult?.finalResult,
       isLoading: invoiceLoading,
-      entity: 'invoice',
-      title: translate('Invoices preview'),
+      entity: 'purchase invoice',
+      title: translate('Purchase Invoices'),
     },
     {
-      result: quoteResult,
-      isLoading: quoteLoading,
-      entity: 'quote',
-      title: translate('quotes preview'),
+      result: invoiceResult?.saleFinalResult,
+      isLoading: invoiceLoading,
+      entity: 'sale invoice',
+      title: translate('Sale Invoices'),
     },
+    // {
+    //   result: quoteResult,
+    //   isLoading: quoteLoading,
+    //   entity: 'quote',
+    //   title: translate('quotes preview'),
+    // },
     {
       result: offerResult,
       isLoading: offerLoading,
@@ -146,7 +152,7 @@ export default function DashboardModule() {
           tagColor={'red'}
           prefix={translate('Not Paid')}
           isLoading={invoiceLoading}
-          tagContent={moneyFormatter({ amount: invoiceResult?.total_undue })}
+          tagContent={moneyFormatter({ amount: invoiceResult?.finalResult.total_undue })}
         />
       </Row>
       <div className="space30"></div>

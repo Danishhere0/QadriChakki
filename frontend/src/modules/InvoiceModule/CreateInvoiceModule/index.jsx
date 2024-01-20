@@ -3,6 +3,7 @@ import CreateItem from '@/modules/ErpPanelModule/CreateItem';
 import InvoiceForm from '@/modules/InvoiceModule/Forms/InvoiceForm';
 
 export default function CreateInvoiceModule({ config }) {
+  console.log('config.type', config.type);
   return (
     <ErpLayout>
       <CreateItem config={config} CreateForm={InvoiceForm} />

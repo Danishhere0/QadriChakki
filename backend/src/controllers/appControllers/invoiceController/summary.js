@@ -30,6 +30,7 @@ const summary = async (req, res) => {
     {
       $match: {
         removed: false,
+        type: 'purchase',
         // date: {
         //   $gte: startDate.toDate(),
         //   $lte: endDate.toDate(),
@@ -162,6 +163,7 @@ const summary = async (req, res) => {
     {
       $match: {
         removed: false,
+        type: 'purchase',
         // date: {
         //   $gte: startDate.toDate(),
         //   $lte: endDate.toDate(),
@@ -196,9 +198,182 @@ const summary = async (req, res) => {
     performance: result,
   };
 
+  const saleResponse = await Model.aggregate([
+    {
+      $match: {
+        removed: false,
+        type: 'sale',
+        // date: {
+        //   $gte: startDate.toDate(),
+        //   $lte: endDate.toDate(),
+        // },
+      },
+    },
+    {
+      $facet: {
+        totalInvoice: [
+          {
+            $group: {
+              _id: null,
+              total: {
+                $sum: '$total',
+              },
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              total: '$total',
+              count: '$count',
+            },
+          },
+        ],
+        statusCounts: [
+          {
+            $group: {
+              _id: '$status',
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              status: '$_id',
+              count: '$count',
+            },
+          },
+        ],
+        paymentStatusCounts: [
+          {
+            $group: {
+              _id: '$paymentStatus',
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              status: '$_id',
+              count: '$count',
+            },
+          },
+        ],
+        overdueCounts: [
+          {
+            $match: {
+              expiredDate: {
+                $lt: new Date(),
+              },
+            },
+          },
+          {
+            $group: {
+              _id: '$status',
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              status: '$_id',
+              count: '$count',
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  let saleResult = [];
+
+  const saleTotalInvoices = saleResponse[0].totalInvoice ? saleResponse[0].totalInvoice[0] : 0;
+  const saleStatusResult = saleResponse[0].statusCounts || [];
+  const salePaymentStatusResult = saleResponse[0].paymentStatusCounts || [];
+  const saleOverdueResult = saleResponse[0].overdueCounts || [];
+
+  const saleStatusResultMap = saleStatusResult.map((item) => {
+    return {
+      ...item,
+      percentage: Math.round((item.count / saleTotalInvoices.count) * 100),
+    };
+  });
+
+  const salePaymentStatusResultMap = salePaymentStatusResult.map((item) => {
+    return {
+      ...item,
+      percentage: Math.round((item.count / saleTotalInvoices.count) * 100),
+    };
+  });
+
+  const saleOverdueResultMap = saleOverdueResult.map((item) => {
+    return {
+      ...item,
+      status: 'overdue',
+      percentage: Math.round((item.count / saleTotalInvoices.count) * 100),
+    };
+  });
+
+  statuses.forEach((status) => {
+    const found = [
+      ...salePaymentStatusResultMap,
+      ...saleStatusResultMap,
+      ...saleOverdueResultMap,
+    ].find((item) => item.status === status);
+    if (found) {
+      saleResult.push(found);
+    }
+  });
+
+  const saleUnpaid = await Model.aggregate([
+    {
+      $match: {
+        removed: false,
+        type: 'sale',
+        // date: {
+        //   $gte: startDate.toDate(),
+        //   $lte: endDate.toDate(),
+        // },
+        paymentStatus: {
+          $in: ['unpaid', 'partially'],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total_amount: {
+          $sum: {
+            $subtract: ['$total', '$credit'],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        total_amount: '$total_amount',
+      },
+    },
+  ]);
+
+  const saleFinalResult = {
+    total: saleTotalInvoices?.total,
+    total_undue: saleUnpaid.length > 0 ? saleUnpaid[0].total_amount : 0,
+    type,
+    performance: saleResult,
+  };
   return res.status(200).json({
     success: true,
-    result: finalResult,
+    result: { finalResult, saleFinalResult },
     message: `Successfully found all invoices for the last ${defaultType}`,
   });
 };

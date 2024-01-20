@@ -40,7 +40,7 @@ export default function CreateItem({ config, CreateForm }) {
   useEffect(() => {
     dispatch(settingsAction.list({ entity: 'setting' }));
   }, []);
-  let { entity } = config;
+  let { entity,type } = config;
   console.log('config', config);
   console.log('CreateForm', CreateForm);
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
@@ -125,7 +125,7 @@ export default function CreateItem({ config, CreateForm }) {
       <Divider dashed />
       <Loading isLoading={isLoading}>
         <Form form={form} layout="vertical" onFinish={onSubmit} onValuesChange={handelValuesChange}>
-          <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
+          <CreateForm type={config.type}  subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>
     </>
