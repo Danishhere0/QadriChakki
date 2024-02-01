@@ -113,7 +113,6 @@ export default function DataTable({ config, extra = [] }) {
                 case 'edit':
                   handleEdit(record);
                   break;
-
                 case 'delete':
                   handleDelete(record);
                   break;

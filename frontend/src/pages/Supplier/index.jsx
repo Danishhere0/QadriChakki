@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { useDate } from '@/settings';
 import { fields } from './config';
 import DynamicForm from '@/forms/DynamicForm';
+import SupplierDataTableModule from '@/modules/SupplierModule/SupplierDataTableModule';
 
 export default function Supplier() {
   const translate = useLanguage();
@@ -113,17 +114,18 @@ export default function Supplier() {
   };
   const config = {
     ...configPage,
-    // readColumns,
-    // dataTableColumns,
-    fields,
+    readColumns,
+    dataTableColumns,
+    // fields,
     searchConfig,
     deleteModalLabels,
   };
   return (
-    <CrudModule
-      createForm={<DynamicForm fields={fields} />}
-      updateForm={<DynamicForm fields={fields} />}
-      config={config}
-    />
+    // <CrudModule
+    //   createForm={<SupplierForm />} // Retaining InventoryForm
+    //   updateForm={<SupplierForm isUpdateForm={true} />}
+    //   config={config}
+    // />
+    <SupplierDataTableModule config={config} />
   );
 }

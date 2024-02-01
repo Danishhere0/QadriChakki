@@ -1,3 +1,4 @@
+import SupplierRead from '@/pages/Supplier/SupplierRead';
 import { lazy } from 'react';
 
 import { useRoutes } from 'react-router-dom';
@@ -80,6 +81,10 @@ export default function AppRouter() {
     {
       path: '/supplier',
       element: <Supplier />,
+    },
+    {
+      path: '/supplier/read/:id',
+      element: <SupplierRead />,
     },
     {
       path: '/customer',

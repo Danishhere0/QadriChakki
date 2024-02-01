@@ -25,50 +25,50 @@ import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
 import { tagColor } from '@/utils/statusTagColor';
 
-const Item = ({ item }) => {
-  const { moneyFormatter } = useMoney();
-  return (
-    <Row gutter={[12, 0]} key={item._id}>
-      <Col className="gutter-row" span={11}>
-        <p style={{ marginBottom: 5 }}>
-          <strong>{item.itemName}</strong>
-        </p>
-        <p>{item.description}</p>
-      </Col>
-      <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          {moneyFormatter({ amount: item.price })}
-        </p>
-      </Col>
-      <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          {item.quantity}
-        </p>
-      </Col>
-      <Col className="gutter-row" span={5}>
-        <p
-          style={{
-            textAlign: 'right',
-            fontWeight: '700',
-          }}
-        >
-          {moneyFormatter({ amount: item.total })}
-        </p>
-      </Col>
-      <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
-    </Row>
-  );
-};
+// const Item = ({ item }) => {
+//   const { moneyFormatter } = useMoney();
+//   return (
+//     <Row gutter={[12, 0]} key={item._id}>
+//       <Col className="gutter-row" span={11}>
+//         <p style={{ marginBottom: 5 }}>
+//           <strong>{item.itemName}</strong>
+//         </p>
+//         <p>{item.description}</p>
+//       </Col>
+//       <Col className="gutter-row" span={4}>
+//         <p
+//           style={{
+//             textAlign: 'right',
+//           }}
+//         >
+//           {moneyFormatter({ amount: item.price })}
+//         </p>
+//       </Col>
+//       <Col className="gutter-row" span={4}>
+//         <p
+//           style={{
+//             textAlign: 'right',
+//           }}
+//         >
+//           {item.quantity}
+//         </p>
+//       </Col>
+//       <Col className="gutter-row" span={5}>
+//         <p
+//           style={{
+//             textAlign: 'right',
+//             fontWeight: '700',
+//           }}
+//         >
+//           {moneyFormatter({ amount: item.total })}
+//         </p>
+//       </Col>
+//       <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+//     </Row>
+//   );
+// };
 
-export default function ReadItem({ config, selectedItem }) {
+export default function ReadSupplier({ config, selectedItem }) {
   const translate = useLanguage();
   const { entity, ENTITY_NAME } = config;
   const dispatch = useDispatch();
@@ -78,7 +78,6 @@ export default function ReadItem({ config, selectedItem }) {
   const { send, isLoading: mailInProgress } = useMail({ entity });
 
   const { result: currentResult } = useSelector(selectCurrentItem);
-  
 
   console.log('currentResult', currentResult);
   const resetErp = {
@@ -102,33 +101,34 @@ export default function ReadItem({ config, selectedItem }) {
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
   const [client, setClient] = useState({});
 
-  useEffect(() => {
-    if (currentResult) {
-      const { items, invoice, ...others } = currentResult;
+  // useEffect(() => {
+  //   if (currentResult) {
+  //     const { items, invoice, ...others } = currentResult;
 
-      if (items) {
-        setItemsList(items);
-        setCurrentErp(currentResult);
-      } else if (invoice.items) {
-        setItemsList(invoice.items);
-        setCurrentErp({ ...invoice.items, ...others, ...invoice });
-      }
-    }
-    return () => {
-      setItemsList([]);
-      setCurrentErp(resetErp);
-    };
-  }, [currentResult]);
+  //     if (items) {
+  //       setItemsList(items);
+  //       setCurrentErp(currentResult);
+  //     } else if (invoice.items) {
+  //       setItemsList(invoice.items);
+  //       setCurrentErp({ ...invoice.items, ...others, ...invoice });
+  //     }
+  //   }
+  //   return () => {
+  //     setItemsList([]);
+  //     setCurrentErp(resetErp);
+  //   };
+  // }, [currentResult]);
 
-  useEffect(() => {
-    if (currentErp?.client) {
-      setClient(currentErp.client[currentErp.client.type]);
-    }
-  }, [currentErp]);
+  // useEffect(() => {
+  //   if (currentErp?.client) {
+  //     setClient(currentErp.client[currentErp.client.type]);
+  //   }
+  // }, [currentErp]);
 
   return (
     <>
-      <PageHeader
+    <h1>Hello</h1>
+      {/* <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
         }}
@@ -309,7 +309,7 @@ export default function ReadItem({ config, selectedItem }) {
             <p>{moneyFormatter({ amount: currentErp.total })}</p>
           </Col>
         </Row>
-      </div>
+      </div> */}
     </>
   );
 }
