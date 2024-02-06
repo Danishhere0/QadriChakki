@@ -10,14 +10,14 @@ const paginatedList = async (req, res) => {
   const skip = page * limit - limit;
 
   //  Query the database for a list of all results
-  const resultsPromise = Model.find({ removed: false, type:type })
+  const resultsPromise = Model.find({ removed: false, type })
     .skip(skip)
     .limit(limit)
     .sort({ created: 'desc' })
     .populate('createdBy', 'name')
     .exec();
   // Counting the total documents
-  const countPromise = Model.countDocuments({ removed: false, type: type });
+  const countPromise = Model.countDocuments({ removed: false, type });
   // Resolving both promises
   const [result, count] = await Promise.all([resultsPromise, countPromise]);
   // Calculating total pages

@@ -31,13 +31,6 @@ export default function Supplier() {
     {
       title: translate('City'),
       dataIndex: 'city',
-      render: (date) => {
-        return dayjs(date).format(dateFormat);
-      },
-    },
-    {
-      title: translate('Department'),
-      dataIndex: 'department',
     },
     {
       title: translate('Email'),
@@ -61,15 +54,6 @@ export default function Supplier() {
     {
       title: translate('last name'),
       dataIndex: 'surname',
-    },
-    {
-      title: translate('Birthday'),
-      dataIndex: 'birthday',
-      isDate: true,
-    },
-    {
-      title: translate('birthplace'),
-      dataIndex: 'birthplace',
     },
     {
       title: translate('gender'),

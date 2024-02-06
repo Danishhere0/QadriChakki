@@ -213,9 +213,13 @@ const request = {
     return source;
   },
 
-  summary: async ({ entity }) => {
+  summary: async ({ entity, id }) => {
+    let withId = '';
+    if (id) {
+      withId = `?id=${id}`;
+    }
     try {
-      const response = await axios.get(entity + '/summary');
+      const response = await axios.get(entity + `/summary${withId}`);
 
       successHandler(response, {
         notifyOnSuccess: false,

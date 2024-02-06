@@ -22,112 +22,124 @@ import { selectCurrentItem } from '@/redux/erp/selectors';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { tagColor } from '@/utils/statusTagColor';
-
-// const Item = ({ item }) => {
-//   const { moneyFormatter } = useMoney();
-//   return (
-//     <Row gutter={[12, 0]} key={item._id}>
-//       <Col className="gutter-row" span={11}>
-//         <p style={{ marginBottom: 5 }}>
-//           <strong>{item.itemName}</strong>
-//         </p>
-//         <p>{item.description}</p>
-//       </Col>
-//       <Col className="gutter-row" span={4}>
-//         <p
-//           style={{
-//             textAlign: 'right',
-//           }}
-//         >
-//           {moneyFormatter({ amount: item.price })}
-//         </p>
-//       </Col>
-//       <Col className="gutter-row" span={4}>
-//         <p
-//           style={{
-//             textAlign: 'right',
-//           }}
-//         >
-//           {item.quantity}
-//         </p>
-//       </Col>
-//       <Col className="gutter-row" span={5}>
-//         <p
-//           style={{
-//             textAlign: 'right',
-//             fontWeight: '700',
-//           }}
-//         >
-//           {moneyFormatter({ amount: item.total })}
-//         </p>
-//       </Col>
-//       <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
-//     </Row>
-//   );
-// };
+import SummaryCard from '../DashboardModule/components/SummaryCard';
+import useFetch from '@/hooks/useFetch';
+import { request } from '@/request';
 
 export default function ReadSupplier({ config, selectedItem }) {
   const translate = useLanguage();
   const { entity, ENTITY_NAME } = config;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { id } = useParams();
   const { moneyFormatter } = useMoney();
-  const { send, isLoading: mailInProgress } = useMail({ entity });
+  // const { send, isLoading: mailInProgress } = useMail({ entity });
 
-  const { result: currentResult } = useSelector(selectCurrentItem);
+  // const { result: currentResult } = useSelector(selectCurrentItem);
 
-  console.log('currentResult', currentResult);
-  const resetErp = {
-    status: '',
-    client: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
+  const { result: invoiceResult, isLoading: invoiceLoading } = useFetch(() =>
+    request.summary({ entity: 'invoice', id })
+  );
+  const { result: quoteResult, isLoading: quoteLoading } = useFetch(() =>
+    request.summary({ entity: 'quote' })
+  );
+
+  const { result: offerResult, isLoading: offerLoading } = useFetch(() =>
+    request.summary({ entity: 'offer' })
+  );
+
+  const { result: paymentResult, isLoading: paymentLoading } = useFetch(() =>
+    request.summary({ entity: 'payment', id })
+  );
+
+  const { result: clientResult, isLoading: clientLoading } = useFetch(() =>
+    request.summary({ entity: 'client' })
+  );
+
+  console.log('clientResult', clientResult);
+
+  const entityData = [
+    {
+      result: invoiceResult?.finalResult,
+      isLoading: invoiceLoading,
+      entity: 'purchase invoice',
+      title: translate('Purchase Invoices'),
     },
-    subTotal: 0,
-    taxTotal: 0,
-    taxRate: 0,
-    total: 0,
-    credit: 0,
-    number: 0,
-    year: 0,
-  };
+    // {
+    //   result: invoiceResult?.saleFinalResult,
+    //   isLoading: invoiceLoading,
+    //   entity: 'sale invoice',
+    //   title: translate('Sale Invoices'),
+    // },
+    {
+      result: offerResult,
+      isLoading: offerLoading,
+      entity: 'offer',
+      title: translate('offers preview'),
+    },
+    {
+      result: paymentResult,
+      isLoading: paymentLoading,
+      entity: 'payment',
+      title: translate('payments preview'),
+    },
+  ];
 
-  const [itemslist, setItemsList] = useState([]);
-  const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
-  const [client, setClient] = useState({});
+  const cards = entityData.map((data, index) => {
+    const { result, entity, isLoading } = data;
 
-  // useEffect(() => {
-  //   if (currentResult) {
-  //     const { items, invoice, ...others } = currentResult;
+    if (entity === 'offer') return null;
 
-  //     if (items) {
-  //       setItemsList(items);
-  //       setCurrentErp(currentResult);
-  //     } else if (invoice.items) {
-  //       setItemsList(invoice.items);
-  //       setCurrentErp({ ...invoice.items, ...others, ...invoice });
-  //     }
-  //   }
-  //   return () => {
-  //     setItemsList([]);
-  //     setCurrentErp(resetErp);
-  //   };
-  // }, [currentResult]);
+    return (
+      <SummaryCard
+        key={index}
+        title={data?.entity === 'payment' ? translate('Payment') : translate(data?.entity)}
+        tagColor={
+          data?.entity === 'invoice' ? 'cyan' : data?.entity === 'quote' ? 'purple' : 'green'
+        }
+        prefix={translate('This month')}
+        isLoading={isLoading}
+        tagContent={moneyFormatter({ amount: result?.total })}
+      />
+    );
+  });
 
-  // useEffect(() => {
-  //   if (currentErp?.client) {
-  //     setClient(currentErp.client[currentErp.client.type]);
-  //   }
-  // }, [currentErp]);
+  // console.log('currentResult', currentResult);
+  // const resetErp = {
+  //   status: '',
+  //   client: {
+  //     name: '',
+  //     email: '',
+  //     phone: '',
+  //     address: '',
+  //   },
+  //   subTotal: 0,
+  //   taxTotal: 0,
+  //   taxRate: 0,
+  //   total: 0,
+  //   credit: 0,
+  //   number: 0,
+  //   year: 0,
+  // };
+
+  // const [itemslist, setItemsList] = useState([]);
+  // const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
+  // const [client, setClient] = useState({});
 
   return (
     <>
-    <h1>Hello</h1>
+      <Row gutter={[32, 32]}>
+        {cards}
+        <SummaryCard
+          title={translate('Due Balance')}
+          tagColor={'red'}
+          prefix={translate('Not Paid')}
+          isLoading={invoiceLoading}
+          tagContent={moneyFormatter({ amount: invoiceResult?.finalResult.total_undue })}
+        />
+      </Row>
       {/* <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);

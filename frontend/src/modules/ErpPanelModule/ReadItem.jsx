@@ -70,7 +70,7 @@ const Item = ({ item }) => {
 
 export default function ReadItem({ config, selectedItem }) {
   const translate = useLanguage();
-  const { entity, ENTITY_NAME } = config;
+  const { entity, ENTITY_NAME, type } = config;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -81,6 +81,13 @@ export default function ReadItem({ config, selectedItem }) {
   
 
   console.log('currentResult', currentResult);
+
+   let saleType;
+   if (type == 'purchase') {
+     saleType = 'supplier';
+   } else {
+     saleType = 'client';
+   }
   const resetErp = {
     status: '',
     client: {
@@ -130,7 +137,7 @@ export default function ReadItem({ config, selectedItem }) {
     <>
       <PageHeader
         onBack={() => {
-          navigate(`/${entity.toLowerCase()}`);
+          navigate(`/${type + `/` + entity.toLowerCase()}`);
         }}
         title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
         ghost={false}
@@ -148,7 +155,7 @@ export default function ReadItem({ config, selectedItem }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              navigate(`/${entity.toLowerCase()}`);
+              navigate(`/${type + `/` + entity.toLowerCase()}`);
             }}
             icon={<CloseCircleOutlined />}
           >
@@ -234,7 +241,7 @@ export default function ReadItem({ config, selectedItem }) {
         </Row>
       </PageHeader>
       <Divider dashed />
-      <Descriptions title={`Client : ${currentErp.client.name}`}>
+      <Descriptions title={`${saleType} : ${currentErp.client.name}`}>
         <Descriptions.Item label={translate('Address')}>{client.address}</Descriptions.Item>
         <Descriptions.Item label={translate('email')}>{client.email}</Descriptions.Item>
         <Descriptions.Item label={translate('Phone')}>{client.phone}</Descriptions.Item>

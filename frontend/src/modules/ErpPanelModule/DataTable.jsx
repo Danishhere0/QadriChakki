@@ -17,7 +17,7 @@ import { erp } from '@/redux/erp/actions';
 import { selectListItems } from '@/redux/erp/selectors';
 import { useErpContext } from '@/context/erp';
 import { generate as uniqueId } from 'shortid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
@@ -29,8 +29,8 @@ function AddNewItem({ config }) {
   const handleClick = () => {
     if (type) {
       if (type == 'sale') {
-        navigate(`/${type}Invoice/create`);
-      } else navigate(`/${type}Invoice/create`);
+        navigate(`/${type}/invoice/create`);
+      } else navigate(`/${type}/invoice/create`);
     } else {
       navigate(`/${entity.toLowerCase()}/create`);
     }
@@ -45,14 +45,23 @@ function AddNewItem({ config }) {
 
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
-  let { entity, dataTableColumns, disableAdd = false } = config;
+  let { entity, dataTableColumns, disableAdd = false, DATATABLE_TITLE, type } = config;
 
-  const { DATATABLE_TITLE, type } = config;
+  const { id } = useParams();
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
 
   const { pagination, items: dataSource } = listResult;
 
+  const filteredDataSource = dataSource.filter((item) => item.supplier?._id === id);
+  console.log('filteredDataSource', type, id, filteredDataSource);
+  console.log('dataSource', dataSource);
+  var saleType = '';
+  if (type == 'purchase') {
+    saleType = 'supplier';
+  } else {
+    saleType = 'client';
+  }
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
 
@@ -88,12 +97,12 @@ export default function DataTable({ config, extra = [] }) {
 
   const handleRead = (record) => {
     dispatch(erp.currentItem({ data: record }));
-    navigate(`/${entity}/read/${record._id}`);
+    navigate(`/${type + `/` + entity}/read/${record._id}`);
   };
   const handleEdit = (record) => {
     const data = { ...record };
     dispatch(erp.currentAction({ actionType: 'update', data }));
-    navigate(`/${entity}/update/${record._id}`);
+    navigate(`/${type + `/` + entity}/update/${record._id}`);
   };
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
@@ -170,12 +179,17 @@ export default function DataTable({ config, extra = [] }) {
   }, [type]);
 
   const dispatcher = () => {
-    dispatch(erp.list({ entity }));
+    const options = {
+      // page: pagination?.current || 1,
+      // items: pagination?.pageSize || 10,
+      type,
+    };
+    dispatch(erp.list({ entity, options }));
   };
 
   useEffect(() => {
     const controller = new AbortController();
-    dispatcher();
+    // dispatcher();
     return () => {
       controller.abort();
     };
@@ -200,7 +214,8 @@ export default function DataTable({ config, extra = [] }) {
       <Table
         columns={dataTableColumns}
         rowKey={(item) => item._id}
-        dataSource={dataSource}
+        // dataSource={dataSource}
+        dataSource={id ? filteredDataSource : dataSource}
         pagination={pagination}
         loading={listIsLoading}
         onChange={handelDataTableLoad}

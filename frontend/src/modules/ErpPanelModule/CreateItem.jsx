@@ -102,7 +102,7 @@ export default function CreateItem({ config, CreateForm }) {
     <>
       <PageHeader
         onBack={() => {
-          navigate(`/${entity.toLowerCase()}`);
+          navigate(`/${type + `/` +entity.toLowerCase()}`);
         }}
         title={translate('New')}
         ghost={false}

@@ -5,9 +5,9 @@ const Model = mongoose.model('Invoice');
 
 const summary = async (req, res) => {
   let defaultType = 'month';
-
-  const { type } = req.query;
-
+  
+  const { type, id } = req.query;
+console.log('iddd', id);
   if (type) {
     if (['week', 'month', 'year'].includes(type)) {
       defaultType = type;
@@ -31,6 +31,7 @@ const summary = async (req, res) => {
       $match: {
         removed: false,
         type: 'purchase',
+        supplier:id,
         // date: {
         //   $gte: startDate.toDate(),
         //   $lte: endDate.toDate(),

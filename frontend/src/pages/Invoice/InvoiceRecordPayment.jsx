@@ -1,7 +1,7 @@
 import useLanguage from '@/locale/useLanguage';
 import RecordPaymentModule from '@/modules/InvoiceModule/RecordPaymentModule';
 
-export default function InvoiceRecord() {
+export default function InvoiceRecord({type}) {
   const entity = 'invoice';
   const translate = useLanguage();
   const Labels = {
@@ -16,6 +16,7 @@ export default function InvoiceRecord() {
   const configPage = {
     entity,
     ...Labels,
+    type,
   };
   return <RecordPaymentModule config={configPage} />;
 }

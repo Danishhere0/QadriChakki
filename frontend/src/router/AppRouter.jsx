@@ -123,32 +123,44 @@ export default function AppRouter() {
       element: <Order />,
     },
     {
-      path: '/saleInvoice',
+      path: '/sale/invoice',
       element: <Invoice type="sale" />,
     },
     {
-      path: '/purchaseInvoice',
+      path: '/purchase/invoice',
       element: <Invoice type="purchase" />,
     },
     {
-      path: '/saleInvoice/create',
+      path: '/sale/invoice/create',
       element: <InvoiceCreate type="sale" />,
     },
     {
-      path: '/purchaseInvoice/create',
+      path: '/purchase/invoice/create',
       element: <InvoiceCreate type="purchase" />,
     },
     {
-      path: '/invoice/read/:id',
-      element: <InvoiceRead />,
+      path: '/sale/invoice/read/:id',
+      element: <InvoiceRead type="sale" />,
     },
     {
-      path: '/invoice/update/:id',
-      element: <InvoiceUpdate />,
+      path: '/purchase/invoice/read/:id',
+      element: <InvoiceRead type="purchase" />,
     },
     {
-      path: '/invoice/pay/:id',
-      element: <InvoiceRecordPayment />,
+      path: '/sale/invoice/update/:id',
+      element: <InvoiceUpdate type="sale" />,
+    },
+    {
+      path: '/purchase/invoice/update/:id',
+      element: <InvoiceUpdate type="purchase" />,
+    },
+    {
+      path: '/purchase/invoice/pay/:id',
+      element: <InvoiceRecordPayment type="purchase" />,
+    },
+    {
+      path: '/sale/invoice/pay/:id',
+      element: <InvoiceRecordPayment type="sale" />,
     },
     {
       path: '/quote',

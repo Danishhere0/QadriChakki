@@ -1,7 +1,7 @@
 import useLanguage from '@/locale/useLanguage';
 import UpdateInvoiceModule from '@/modules/InvoiceModule/UpdateInvoiceModule';
 
-export default function InvoiceUpdate() {
+export default function InvoiceUpdate(type) {
   const entity = 'invoice';
   const translate = useLanguage();
   const Labels = {
@@ -16,6 +16,7 @@ export default function InvoiceUpdate() {
   const configPage = {
     entity,
     ...Labels,
+    type,
   };
   return <UpdateInvoiceModule config={configPage} />;
 }

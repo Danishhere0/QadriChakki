@@ -19,7 +19,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 // import { StatusTag } from '@/components/Tag';
 
 function SaveForm({ form, translate }) {
-  
   const handelClick = () => {
     form.submit();
   };
@@ -32,8 +31,9 @@ function SaveForm({ form, translate }) {
 }
 
 export default function UpdateItem({ config, UpdateForm }) {
+  
   const translate = useLanguage();
-  let { entity } = config;
+  let { entity, type } = config;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,6 +41,12 @@ export default function UpdateItem({ config, UpdateForm }) {
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
 
+  let saleType;
+  if (type == 'purchase') {
+    saleType = 'supplier';
+  } else {
+    saleType = 'client';
+  }
   const resetErp = {
     status: '',
     client: {
@@ -135,7 +141,7 @@ export default function UpdateItem({ config, UpdateForm }) {
     <>
       <PageHeader
         onBack={() => {
-          navigate(`/${entity.toLowerCase()}`);
+          navigate(`/${type + `/` + entity.toLowerCase()}`);
         }}
         title={translate('update')}
         ghost={false}
@@ -153,7 +159,7 @@ export default function UpdateItem({ config, UpdateForm }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              navigate(`/${entity.toLowerCase()}`);
+              navigate(`/${type + `/` + entity.toLowerCase()}`);
             }}
             icon={<CloseCircleOutlined />}
           >

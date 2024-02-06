@@ -1,7 +1,7 @@
 import useLanguage from '@/locale/useLanguage';
 import ReadInvoiceModule from '@/modules/InvoiceModule/ReadInvoiceModule';
 
-export default function InvoiceRead() {
+export default function InvoiceRead({type}) {
   const entity = 'invoice';
   const translate = useLanguage();
   const Labels = {
@@ -16,6 +16,7 @@ export default function InvoiceRead() {
   const configPage = {
     entity,
     ...Labels,
+    type,
   };
   return <ReadInvoiceModule config={configPage} />;
 }

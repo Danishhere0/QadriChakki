@@ -12,19 +12,25 @@ export default function Invoice({ type }) {
   const entity = 'invoice';
   const { moneyFormatter } = useMoney();
 
+  let saleType;
+  if ((type == 'purchase')) {
+    saleType = 'supplier';
+  } else {
+    saleType = 'client';
+  }
   const searchConfig = {
     displayLabels: ['name'],
     searchFields: 'name',
   };
-  const deleteModalLabels = ['number', 'client.name'];
+  const deleteModalLabels = ['number', `${saleType}.name`];
   const dataTableColumns = [
     {
       title: translate('Number'),
       dataIndex: 'number',
     },
     {
-      title: translate('Client'),
-      dataIndex: ['client', 'name'],
+      title: translate(saleType),
+      dataIndex: [saleType, 'name'],
     },
     {
       title: translate('Type'),
