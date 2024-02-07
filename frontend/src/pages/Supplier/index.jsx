@@ -12,12 +12,12 @@ export default function Supplier() {
   const { dateFormat } = useDate();
   const entity = 'supplier';
   const searchConfig = {
-    displayLabels: ['name', 'surname'],
-    searchFields: 'name,surname,birthday',
+    displayLabels: ['name', 'legalName'],
+    searchFields: 'name,legalName,birthday',
     outputValue: '_id',
   };
 
-  const deleteModalLabels = ['name', 'surname'];
+  const deleteModalLabels = ['name', 'legalName'];
 
   const dataTableColumns = [
     {
@@ -53,7 +53,7 @@ export default function Supplier() {
     },
     {
       title: translate('last name'),
-      dataIndex: 'surname',
+      dataIndex: 'legalName',
     },
     {
       title: translate('gender'),
@@ -103,13 +103,14 @@ export default function Supplier() {
     // fields,
     searchConfig,
     deleteModalLabels,
+    type: 'purchase',
   };
   return (
-    // <CrudModule
-    //   createForm={<SupplierForm />} // Retaining InventoryForm
-    //   updateForm={<SupplierForm isUpdateForm={true} />}
-    //   config={config}
-    // />
-    <SupplierDataTableModule config={config} />
+    <CrudModule
+      createForm={<SupplierForm />} // Retaining InventoryForm
+      updateForm={<SupplierForm isUpdateForm={true} />}
+      config={config}
+    />
+    // <SupplierDataTableModule config={config} />
   );
 }

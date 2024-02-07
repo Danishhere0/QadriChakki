@@ -8,6 +8,7 @@ import DeleteModal from '@/components/DeleteModal';
 import ReadItem from '@/components/ReadItem';
 import SearchItem from '@/components/SearchItem';
 import DataTable from '@/components/DataTable/DataTable';
+import { erp } from '@/redux/erp/actions';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,18 +18,21 @@ import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
 
 import { CrudLayout } from '@/layout';
+import { useNavigate } from 'react-router-dom';
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
-  const { deleteModalLabels } = config;
+  const { deleteModalLabels, type } = config;
   const { modal, editBox } = crudContextAction;
 
   const { isReadBoxOpen, isEditBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [labels, setLabels] = useState('');
+
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
@@ -45,7 +49,12 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
     editBox.open();
   };
-
+  const handleRead = (record) => {
+    dispatch(erp.currentItem({ data: record }));
+    if (type) navigate(`/${type}/invoice/read/${record._id}`);
+    // navigate(`/${entity}/read/${record._id}`);
+  };
+  console.log(type, 'type');
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
     <>
@@ -72,6 +81,16 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           >
             {translate('edit')}
           </Button>
+          <Button
+            onClick={handleRead(currentItem)}
+            type="text"
+            icon={<EditOutlined />}
+            size="small"
+            style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
+          >
+            {translate('show')}
+          </Button>
+          {}
         </Col>
 
         <Col span={24}>
@@ -79,7 +98,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
         </Col>
         <div className="space10"></div>
       </Row>
+      {handleRead(currentItem)}
       <ReadItem config={config} />
+
       <UpdateForm config={config} formElements={formElements} withUpload={withUpload} />
     </>
   );
@@ -108,7 +129,6 @@ function FixHeaderPanel({ config }) {
 
 function CrudModule({ config, createForm, updateForm, withUpload = false }) {
   const dispatch = useDispatch();
-  
 
   useLayoutEffect(() => {
     dispatch(crud.resetState());

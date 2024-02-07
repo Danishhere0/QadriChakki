@@ -97,12 +97,14 @@ export default function DataTable({ config, extra = [] }) {
 
   const handleRead = (record) => {
     dispatch(erp.currentItem({ data: record }));
-    navigate(`/${type + `/` + entity}/read/${record._id}`);
+    if (type) navigate(`/${type + `/` + entity}/read/${record._id}`);
+    navigate(`/${entity}/read/${record._id}`);
   };
   const handleEdit = (record) => {
     const data = { ...record };
     dispatch(erp.currentAction({ actionType: 'update', data }));
-    navigate(`/${type + `/` + entity}/update/${record._id}`);
+    if (type) navigate(`/${type + `/` + entity}/read/${record._id}`);
+    navigate(`/${entity}/read/${record._id}`);
   };
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
