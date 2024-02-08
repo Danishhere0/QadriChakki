@@ -51,7 +51,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   };
   const handleRead = (record) => {
     dispatch(erp.currentItem({ data: record }));
-    if (type) navigate(`/${type}/invoice/read/${record._id}`);
+    if (type) navigate(`/supplier/read/${record._id}`);
     // navigate(`/${entity}/read/${record._id}`);
   };
   console.log(type, 'type');

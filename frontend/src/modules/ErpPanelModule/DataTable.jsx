@@ -54,8 +54,8 @@ export default function DataTable({ config, extra = [] }) {
   const { pagination, items: dataSource } = listResult;
 
   const filteredDataSource = dataSource.filter((item) => item.supplier?._id === id);
-  console.log('filteredDataSource', type, id, filteredDataSource);
-  console.log('dataSource', dataSource);
+  // console.log('filteredDataSource', type, id, filteredDataSource);
+  console.log('type dataSource', type);
   var saleType = '';
   if (type == 'purchase') {
     saleType = 'supplier';
@@ -98,13 +98,16 @@ export default function DataTable({ config, extra = [] }) {
   const handleRead = (record) => {
     dispatch(erp.currentItem({ data: record }));
     if (type) navigate(`/${type + `/` + entity}/read/${record._id}`);
-    navigate(`/${entity}/read/${record._id}`);
+    else navigate(`/${entity}/read/${record._id}`);
+    console.log('record', record);
   };
   const handleEdit = (record) => {
     const data = { ...record };
     dispatch(erp.currentAction({ actionType: 'update', data }));
-    if (type) navigate(`/${type + `/` + entity}/read/${record._id}`);
-    navigate(`/${entity}/read/${record._id}`);
+    if (type) navigate(`/${type + `/` + entity}/update/${record._id}`);
+    else navigate(`/${entity}/update/${record._id}`);
+        console.log('record', record);
+
   };
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
