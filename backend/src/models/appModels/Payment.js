@@ -34,6 +34,10 @@ const paymentSchema = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
   amount: {
     type: Number,
     required: true,
@@ -42,6 +46,12 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'PaymentMode',
     autopopulate: true,
+  },
+  chequeNo: {
+    type: String,
+  },
+  bankName: {
+    type: String,
   },
   ref: {
     type: String,

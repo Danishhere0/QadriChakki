@@ -15,7 +15,7 @@ import calculate from '@/utils/calculate';
 export default function RecordPayment({ config }) {
   const navigate = useNavigate();
   const translate = useLanguage();
-  let { entity } = config;
+  let { entity, type } = config;
 
   const dispatch = useDispatch();
 
@@ -24,6 +24,12 @@ export default function RecordPayment({ config }) {
   const [form] = Form.useForm();
 
   const [maxAmount, setMaxAmount] = useState(0);
+  var saleType = '';
+  if (type == 'purchase') {
+    saleType = 'supplier';
+  } else {
+    saleType = 'client';
+  }
   useEffect(() => {
     if (currentInvoice) {
       const { credit, total, discount } = currentInvoice;
@@ -61,7 +67,7 @@ export default function RecordPayment({ config }) {
   return (
     <Loading isLoading={isLoading}>
       <Form form={form} layout="vertical" onFinish={onSubmit}>
-        <PaymentForm maxAmount={maxAmount} />
+        <PaymentForm maxAmount={maxAmount} type={type} />
         <Form.Item>
           <Button type="primary" htmlType="submit">
             {translate('Record Payment')}

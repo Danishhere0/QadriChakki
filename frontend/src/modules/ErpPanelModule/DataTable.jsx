@@ -106,8 +106,7 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(erp.currentAction({ actionType: 'update', data }));
     if (type) navigate(`/${type + `/` + entity}/update/${record._id}`);
     else navigate(`/${entity}/update/${record._id}`);
-        console.log('record', record);
-
+    console.log('record', record);
   };
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
@@ -120,7 +119,8 @@ export default function DataTable({ config, extra = [] }) {
 
   const handleRecordPayment = (record) => {
     dispatch(erp.currentItem({ data: record }));
-    navigate(`/invoice/pay/${record._id}`);
+    if (type) navigate(`/${type}/invoice/pay/${record._id}`);
+    else navigate(`/invoice/pay/${record._id}`);
   };
 
   dataTableColumns = [

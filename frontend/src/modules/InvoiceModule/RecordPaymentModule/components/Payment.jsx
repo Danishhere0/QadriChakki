@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Payment({ config, currentItem }) {
   const translate = useLanguage();
-  const { entity, ENTITY_NAME } = config;
+  const { entity, ENTITY_NAME, type } = config;
 
   const money = useMoney();
   const navigate = useNavigate();
@@ -29,7 +29,12 @@ export default function Payment({ config, currentItem }) {
       setClient(currentErp.client[currentErp.client.type]);
     }
   }, [currentErp]);
-
+  var saleType = '';
+  if (type == 'purchase') {
+    saleType = 'supplier';
+  } else {
+    saleType = 'client';
+  }
   useEffect(() => {
     const controller = new AbortController();
     if (currentItem) {
@@ -101,9 +106,13 @@ export default function Payment({ config, currentItem }) {
           lg={{ span: 10, order: 2, push: 4 }}
         >
           <div className="space50"></div>
-          <Descriptions title={`${translate('Client')}  : ${currentErp.client.name}`} column={1}>
-            <Descriptions.Item label={translate('email')}>{client.email}</Descriptions.Item>
-            <Descriptions.Item label={translate('phone')}>{client.phone}</Descriptions.Item>
+          <Descriptions title={`${translate(saleType)}  : ${currentErp[saleType].name}`} column={1}>
+            <Descriptions.Item label={translate('email')}>
+              {currentErp[saleType].email}
+            </Descriptions.Item>
+            <Descriptions.Item label={translate('phone')}>
+              {currentErp[saleType].phone}
+            </Descriptions.Item>
             <Divider dashed />
             <Descriptions.Item label={translate('payment status')}>
               <Tag color={tagColor(currentErp.paymentStatus)?.color}>

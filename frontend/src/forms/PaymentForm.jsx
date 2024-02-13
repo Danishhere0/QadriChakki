@@ -1,13 +1,13 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 import { DatePicker } from 'antd';
 import SelectAsync from '@/components/SelectAsync';
 import { useMoney, useDate } from '@/settings';
 
 import useLanguage from '@/locale/useLanguage';
 
-export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) {
+export default function PaymentForm({ maxAmount = null, isUpdateForm = false, type }) {
   const translate = useLanguage();
   const { TextArea } = Input;
   const money = useMoney();
@@ -26,6 +26,23 @@ export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) 
         style={{ width: '50%', float: 'left', paddingRight: '20px' }}
       >
         <InputNumber min={1} style={{ width: '100%' }} />
+      </Form.Item>
+      <Form.Item
+        label={translate('type')}
+        name="type"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        initialValue={type}
+      >
+        <Select
+          options={[
+            { value: 'sale', label: translate('Sale') },
+            { value: 'purchase', label: translate('Purchase') },
+          ]}
+        ></Select>
       </Form.Item>
       <Form.Item
         name="date"
@@ -69,6 +86,28 @@ export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) 
         ></SelectAsync>
       </Form.Item>
       <Form.Item label={translate('Reference')} name="ref">
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label={translate('Cheque No')}
+        name="chequeNo"
+        // rules={[
+        //   {
+        //     required: true,
+        //   },
+        // ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label={translate('Bank Name')}
+        name="bankName"
+        // rules={[
+        //   {
+        //     required: true,
+        //   },
+        // ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item label={translate('Description')} name="description">
