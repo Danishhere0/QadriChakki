@@ -61,7 +61,7 @@ export default function Payment({ config, currentItem }) {
           lg={{ span: 20, push: 2 }}
         >
           <PageHeader
-            onBack={() => navigate(`/${entity.toLowerCase()}`)}
+            onBack={() => navigate(`/${type}/${entity.toLowerCase()}`)}
             title={`Record Payment for ${ENTITY_NAME} # ${currentErp.number}/${
               currentErp.year || ''
             }`}
@@ -84,7 +84,7 @@ export default function Payment({ config, currentItem }) {
               </Button>,
               <Button
                 key={`${uniqueId()}`}
-                onClick={() => navigate(`/invoice/read/${currentErp._id}`)}
+                onClick={() => navigate(`/${type}/invoice/read/${currentErp._id}`)}
                 icon={<FileTextOutlined />}
               >
                 {translate('Show Invoice')}
